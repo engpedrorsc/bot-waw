@@ -23,3 +23,30 @@ JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't fin
 
 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
 
+1597867402806	geckodriver	INFO	Listening on 127.0.0.1:63836
+1597867405879	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Temp\\rust_mozprofileGNFu29"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1597867407150	Marionette	INFO	Listening on port 63845
+1597867407403	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.696e69d51d821d44fec9.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.696e69d51d821d44fec9.js, line 1: unreachable code after return statement
+1597867413124	Marionette	INFO	Stopped listening on port 63845
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1597867633530	geckodriver	INFO	Listening on 127.0.0.1:50083
+1597867636619	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Temp\\rust_mozprofile9YsveJ"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1597867637855	Marionette	INFO	Listening on port 50092
+1597867638144	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.696e69d51d821d44fec9.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.696e69d51d821d44fec9.js, line 1: unreachable code after return statement
+1597867642461	Marionette	INFO	Stopped listening on port 50092
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+

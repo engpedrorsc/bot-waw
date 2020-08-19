@@ -1,21 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-os.chdir(os.getcwd() + '/bot-waw/core')
-print(os.getcwd())
-
 
 from selenium.webdriver.support.ui import WebDriverWait
 from time import time
-from functions import *
+from auxiliaries.functions import *
 
 
 def main():
-    driver = open_browser('../drivers/geckodriver.exe')
+    driver = open_browser('./drivers/geckodriver.exe')
     wdwA = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
     wdwB = WebDriverWait(driver, 30, poll_frequency=0.5, ignored_exceptions=None) # Long wait.
-    phones = read_input('../inputs/00Telefones.txt', 'Lista telefônica carregada.') # Phones list.
-    message = read_input('../inputs/10Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
+    phones = read_input('./inputs/00Telefones.txt', 'Lista telefônica carregada.') # Phones list.
+    message = read_input('./inputs/10Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
     max_pace = 90 # Maximum sent messages per hour
 
     login(driver, 'http://web.whatsapp.com', wdwA)

@@ -4971,3 +4971,18 @@ console.error: (new Error("Protocol error (Error): Failed to fetch https://web.w
 
 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
 
+1597867315790	geckodriver	INFO	Listening on 127.0.0.1:63758
+1597867318882	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Temp\\rust_mozprofileqEvd92"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1597867320072	Marionette	INFO	Listening on port 63767
+1597867320405	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.696e69d51d821d44fec9.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.696e69d51d821d44fec9.js, line 1: unreachable code after return statement
+1597867324269	Marionette	INFO	Stopped listening on port 63767
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
