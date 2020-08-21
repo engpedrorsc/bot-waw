@@ -1,29 +1,60 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from pathlib import Path
 from selenium.webdriver.support.ui import WebDriverWait
 from time import time
-from auxiliaries.functions import *
+from functions import *
 
 
 def main():
-    driver = open_browser('./drivers/geckodriver.exe')
+    seller = 'Pedro'
+    campaign = 'Teste_2020-08-20'
+
+    input_folder = Path(f'./inputs/{seller}')
+    log_folder = Path(f'./logs/{seller}')
+    log_sent_file = f'{campaign}_sent.txt'
+    log_invalid_file = f'{campaign}_invalid.txt'
+    
+    phones = read_input(input_folder, '00Telefones.txt', 'Lista telefônica carregada.') # Phones list.
+    check_input(phones, 'Lista de telefones vazia.')    
+    message = read_input(input_folder, '10Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
+    check_input(message, 'Mensagem vazia.')
+    sent_log = read_input(log_folder, log_sent_file,'Telefones já contactados carregados.')
+    invalid_log = read_input(log_folder, log_invalid_file, 'Telefones inválidos carregados.')
+
+    remaining_phones = difference(phones, sent_log, invalid_log)
+    check_input(remaining_phones, 'Sem novos telefones para esta campanha.')
+
+    driver = open_browser('geckodriver.exe')
     wdwA = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
     wdwB = WebDriverWait(driver, 30, poll_frequency=0.5, ignored_exceptions=None) # Long wait.
-    phones = read_input('./inputs/00Telefones.txt', 'Lista telefônica carregada.') # Phones list.
-    message = read_input('./inputs/10Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
     max_pace = 90 # Maximum sent messages per hour
 
     login(driver, 'http://web.whatsapp.com', wdwA)
     sent_counter = 0 # Counts delivered messages. Always starts at zero.
     start_time = time() # Set start running time to calculate the pace.
-    for phone in phones:
+    for phone in remaining_phones:
         print(f'Enviando mensagem para {phone}')
         url = f'https://web.whatsapp.com/send?phone={phone}&source=&data=#.'
         try:
-            sent_counter = send_message(start_time, driver, url, message, sent_counter, max_pace, wdwA, wdwB)
+            send_message(start_time, driver, url, message, sent_counter, max_pace, wdwA, wdwB)
+        
         except InvalidUrl:
+            write_log(log_folder, log_invalid_file, phone)
             continue
+
+        except WebDriverException:
+            raise WebDriverException('Computador desconectado. Verifique a conexão do computador. (main loop)')
+        
+        else:
+            write_log(log_folder, log_sent_file, phone)
+            sent_counter += 1
+            if sent_counter == 1:
+                print(f'{sent_counter} mensagem enviada.')
+            else:
+                print(f'{sent_counter} mensagens enviadas.')
+    
     show_statistics() # To be written
     return
 
