@@ -108,7 +108,7 @@ def check_pace(max_pace, start_time, sent_counter):
             return
         else:
             print(f'Passo: {pace} -> Mantendo o passo.')
-            sleep(5)
+            sleep(10)
             return check_pace(max_pace, start_time, sent_counter)
     except ZeroDivisionError:
         sleep(1)
@@ -127,7 +127,7 @@ def send_message(start_time, driver, url, message, sent_counter, max_pace, wdw1,
             ActionChains(driver).key_down(Keys.SHIFT).key_down(Keys.ENTER).key_up(Keys.SHIFT).key_up(Keys.ENTER).perform()
         
         check_pace(max_pace, start_time, sent_counter)
-        input('Pressione ENTER para enviar a mensagem.')
+        # input('Pressione ENTER para enviar a mensagem.')
         text_box.send_keys(Keys.ENTER)
         wdw2.until_not(presence_of_all_elements_located((By.XPATH, '//span[@data-testid = "msg-time"]')))
     
