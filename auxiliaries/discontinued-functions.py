@@ -19,26 +19,17 @@ class EmptyInputFile(Exception):
     pass
 
 
-'''Start and login functions'''
-
-
-def ask_campaign_name():
-    name = input('\n>>>Identifique a campanha<<<\nSugestão: Nome-Data (Ex: Semanal-2020.12.31)\nNome da campanha: ')
-    forbidden = ['<','>',':','"','/','\\','|','?','*']
-    if len(name) == 0:
-        print('\nO nome da campanha é obrigatório.')
-        return ask_campaign_name()
-    for c in name:
-        if c in forbidden:
-            print(f'\nErro: O caractere "{c}" é inválido. Digite um nome com caracteres válidos.')
-            return ask_campaign_name()
-    return name
+'''Login functions'''
 
 
 def open_browser(driver):
     profile = webdriver.FirefoxProfile()
     profile.set_preference('intl.accept_languages', 'en')
-    return webdriver.Firefox(executable_path=driver, firefox_profile=profile)
+    try:
+        return webdriver.Firefox(executable_path=driver, firefox_profile=profile)
+    except WebDriverException:
+        raise WebDriverException('Erro ao abrir o navegador. (open_browser)')
+        raise 
 
 
 def open_page(driver, url, wdw):
@@ -64,8 +55,15 @@ def check_login(driver, wdw):
 
 
 def login(driver, url, wdw):
-    open_page(driver, url, wdw) # Opens page
-    check_login(driver, wdw) # Checks if login was successful
+    try:
+        open_page(driver, url, wdw) # Opens page
+    except WebDriverException:
+        raise WebDriverException('Computador desconectado. Verifique a conexão do computador. (login.open_page)')
+
+    try:
+        check_login(driver, wdw) # Checks if login was successful
+    except WebDriverException:
+        raise WebDriverException('Computador desconectado. Verifique a conexão do computador. (login.check_login)')
 
 
 '''Chat functions'''
@@ -87,8 +85,7 @@ def read_input(path, file, msg):
 
 def check_input(input, msg):
     if len(input) == 0:
-        print(msg)
-        exit()
+        raise EmptyInputFile(msg)
 
 
 def write_log(path, file, text):
@@ -97,9 +94,8 @@ def write_log(path, file, text):
     f.close()
 
 
-def difference(full_list, list1, list2, msg): # To be improved
+def difference(full_list, list1, list2): # To be improved
     filtered = set(full_list) - set(list1) - set(list2)
-    print(msg)
     return list(filtered)
 
 
@@ -158,6 +154,7 @@ def send_message(start_time, driver, url, message, sent_counter, max_pace, wdw1,
         elif bool(driver.find_elements(By.XPATH, '//span[@data-testid = "alert-computer"]')):
             print('Computador desconectado. Verifique a conexão do computador. (send_message)')
             return send_message(start_time, driver, url, message, sent_counter, max_pace, wdw1, wdw2)
+            raise
 
         else:
             driver.refresh()

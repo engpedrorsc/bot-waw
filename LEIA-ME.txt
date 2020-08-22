@@ -1,0 +1,33 @@
+Instruções:
+
+01 - Instale o navegador Mozilla Firefox.
+     Download: https://www.mozilla.org/en-US/firefox/new/
+
+02 - Entre na pasta "inputs", adicione os telefones no arquivo "00Telefones.txt" conforme indicado no arquivo de exemplo e salve.
+
+03 - Entre na pasta "inputs", adicione a mensagem no arquivo "10Mensagens.txt" conforme indicado no arquivo de exemplo e salve.
+
+04 - Se pelo menos um dos arquivos dos itens 2 e 3 ficarem vazios, o bot apontará isso.
+
+05 - Use uma conexão à internet estável tanto para o computador quanto para o celular.
+     Problemas de conexão podem inviabilizar o bom funcionamento.
+     Também mentenha o celular ligado e, se possível, carregando para evitar que descarregue.
+
+06 - Não abra o WhatsApp Web em outro lugar, pois isso irá desconectar o bot.
+     O WhatsApp Web permite apenas uma instância ativa por vez.
+     O uso do WhatsApp pelo celular poderá ser feito normalmente.
+
+07 - Caso haja perda de conexão ou qualquer outro erro, reabra o bot e o inicie com o mesmo nome de campanha.
+     Assim, ele verificará quais números ainda não foram contactados e continuará de onde parou.
+
+08 - As campanhas deverão ter nomes únicos para que o bot trate os contatos de forma adequada, evitando que não sejam contactados
+     ou que recebam mensagens duplicadas.
+
+09 - Mantenha os arquivos da pasta "log" para que o bot possa consultar as campanhas já executadas.
+
+10 - A janela do Firefox deve permanecer aberta. O seu fechamento fará o bot ser encerrado.
+     Caso ela seja fechada, reabra o bot e o inicie com o mesmo nome de campanha.
+
+11 - Os telefones que recebram mensagem com sucesso podem ser vistos no arquivo "(campanha)_sent.txt" dentro da pasta "logs".
+     Os telefones que não possuem WhatsApp podem ser vistos no arquivo "(campanha)_invalid.txt" dentro da pasta "logs".
+     (campanha) = nome da campanha que gerou o log.

@@ -5,11 +5,11 @@ from pathlib import Path
 from selenium.webdriver.support.ui import WebDriverWait
 from time import time
 from functions import *
-from datetime import datetime
 
 
 def main():
-    campaign = ask_campaign_name()
+    seller = 'Pedro'
+    campaign = 'Teste_2020-08-20'
 
     input_folder = Path(f'./inputs')
     log_folder = Path(f'./logs')
@@ -24,7 +24,7 @@ def main():
     sent_log_counter = len(sent_log) # Counts previous delivered messages in the current campaign.
     invalid_log = read_input(log_folder, log_invalid_file, 'Telefones inválidos carregados.')
 
-    remaining_phones = difference(phones, sent_log, invalid_log, 'Telefones da campanha identificados.')
+    remaining_phones = difference(phones, sent_log, invalid_log)
     check_input(remaining_phones, 'Sem novos telefones para esta campanha.')
 
     driver = open_browser('geckodriver.exe')
@@ -47,29 +47,19 @@ def main():
 
         except WebDriverException:
             raise WebDriverException('Computador desconectado. Verifique a conexão do computador. (main loop)')
-            input()
         
         else:
             write_log(log_folder, log_sent_file, phone)
             sent_counter += 1
             sent_total = sent_counter + sent_log_counter
             if sent_total == 1:
-                print(f'{sent_total} mensagem enviada nesta campanha.')
+                print(f'{sent_total} mensagem enviada.')
             else:
-                print(f'{sent_total} mensagens enviadas nesta campanha.')
+                print(f'{sent_total} mensagens enviadas.')
     
     show_statistics() # To be written
     return
 
 
 if __name__ == "__main__":
-    try:
-        if datetime.today() >= datetime.strptime('2020-09-30', '%Y-%m-%d'):
-            print('Contacte o desenvolvedor.')
-            raise Exception('Contacte o desenvolvedor.')
-        main()
-    except WebDriverException:
-        print('Ocorreu algum erro com o navegador ou com a conexão do computador.')
-        input('\nPressione ENTER e feche o navegador para encerrar.')
-    except:
-        input('\nPressione ENTER e feche o navegador para encerrar.')
+    main()
