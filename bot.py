@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from time import time
 from functions import *
 from datetime import datetime
+from urllib.request import urlopen
 
 
 def main():
@@ -64,10 +65,13 @@ def main():
 
 if __name__ == "__main__":
     try:
-        if datetime.today() >= datetime.strptime('2020-09-30', '%Y-%m-%d'):
-            print('Contacte o desenvolvedor.')
+        date_str = urlopen('http://just-the-time.appspot.com/').read().strip().decode('utf-8')
+        date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+        if date <= datetime.strptime('2020-09-30', '%Y-%m-%d'):
+            main()
+        else:
+            print('\nContacte o desenvolvedor.')
             raise Exception('Contacte o desenvolvedor.')
-        main()
     except WebDriverException:
         print('Ocorreu algum erro com o navegador ou com a conexão do computador.')
         input('\nPressione ENTER e feche o navegador para encerrar.')
