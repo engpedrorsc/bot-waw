@@ -7,9 +7,15 @@ from time import time
 from functions import *
 from datetime import datetime
 from urllib.request import urlopen
+from urllib.error import *
 
 
 def main():
+
+    print('O nome da campanha a identifica de forma única.')
+    print('Para retomar uma campanha interrompida ou para enviá-la para novos clientes, use exatamente o mesmo nome.')
+    print('Os telefones e a mensagem não são recuperados com o nome da campanha. Verifique se estão de acordo.')
+    
     campaign = ask_campaign_name()
 
     input_folder = Path(f'./inputs')
@@ -64,16 +70,22 @@ def main():
 
 
 if __name__ == "__main__":
+    expiration_msg = 'Verifique a sua conexão à internet.\nSe estiver OK, contacte o desenvolvedor.'
+    close_msg = 'Pressione ENTER e feche o navegador para encerrar.'
     try:
-        date_str = urlopen('http://just-the-time.appspot.com/').read().strip().decode('utf-8')
+        date_str = urlopen('https://just-the-time.appspot.com/').read().strip().decode('utf-8')
         date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
-        if date <= datetime.strptime('2020-09-30', '%Y-%m-%d'):
+        expiration_date = '2020-09-30'
+        if date <= datetime.strptime(expiration_date, '%Y-%m-%d'):
             main()
         else:
-            print('\nContacte o desenvolvedor.')
-            raise Exception('Contacte o desenvolvedor.')
+            print('\n'+expiration_msg)
+            raise Exception(expiration_msg)
+    except URLError or HTTPError or ContentTooShortError:
+        print('\n'+expiration_msg)
+        input('\n'+close_msg)
     except WebDriverException:
         print('Ocorreu algum erro com o navegador ou com a conexão do computador.')
-        input('\nPressione ENTER e feche o navegador para encerrar.')
+        input('\n'+close_msg)
     except:
-        input('\nPressione ENTER e feche o navegador para encerrar.')
+        input('\n'+close_msg)
