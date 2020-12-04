@@ -1,7 +1,14 @@
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from googleapiclient.http import MediaIoBaseDownload
 from pathlib import Path
 from time import sleep, time
 from math import ceil
 import csv
+import io
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver import ActionChains
@@ -97,8 +104,8 @@ def write_log(path, file, text):
     f.close()
 
 
-def difference(full_list, list1, list2, msg): # To be improved
-    filtered = set(full_list) - set(list1) - set(list2)
+def difference(full_list, list1, list2, list3, msg): # To be improved
+    filtered = set(full_list) - set(list1) - set(list2) - set(list3)
     print(msg)
     return list(filtered)
 

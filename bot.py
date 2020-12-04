@@ -11,27 +11,35 @@ from urllib.error import *
 
 
 def main():
+    input_folder = Path(f'./inputs')
+    log_folder = Path(f'./logs')
 
-    print('O nome da campanha a identifica de forma única.')
+    print('Assegure-se de que possui o arquivo mais recente de telefones bloqueados e o mova para a pasta "inputs".')
+    print('Download: https://drive.google.com/file/d/1jHOy3IdWb_miNPl0fMlY2WU33_inEn17/view?usp=sharing')
+    input('Pressione ENTER quando estiver atualizado.')
+    black_list_file = input_folder/'bloqueados.txt'
+    if not black_list_file.is_file():
+        raise FileNotFoundError('O arquivo de telefones bloqueados não foi encontrado. Verifique e tente novamente.')
+    
+    print('\nO nome da campanha a identifica de forma única.')
     print('Para retomar uma campanha interrompida ou para enviá-la para novos clientes, use exatamente o mesmo nome.')
     print('Os telefones e a mensagem não são recuperados com o nome da campanha. Verifique se estão de acordo.')
     
     campaign = ask_campaign_name()
 
-    input_folder = Path(f'./inputs')
-    log_folder = Path(f'./logs')
     log_sent_file = f'{campaign}_sent.txt'
     log_invalid_file = f'{campaign}_invalid.txt'
     
-    phones = read_input(input_folder, '00Telefones.txt', 'Lista telefônica carregada.') # Phones list.
-    check_input(phones, 'Lista de telefones vazia.')    
-    message = read_input(input_folder, '10Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
+    phones = read_input(input_folder, 'Telefones.txt', 'Lista telefônica carregada.') # Phones list.
+    check_input(phones, 'Lista de telefones vazia.')
+    black_list = read_input(input_folder, 'bloqueados.txt', 'Lista telefônica carregada.') # Blacklisted phones
+    message = read_input(input_folder, 'Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
     check_input(message, 'Mensagem vazia.')
     sent_log = read_input(log_folder, log_sent_file,'Telefones já contactados carregados.')
     sent_log_counter = len(sent_log) # Counts previous delivered messages in the current campaign.
     invalid_log = read_input(log_folder, log_invalid_file, 'Telefones inválidos carregados.')
 
-    remaining_phones = difference(phones, sent_log, invalid_log, 'Telefones da campanha identificados.')
+    remaining_phones = difference(phones, black_list, sent_log, invalid_log, 'Telefones da campanha identificados.')
     check_input(remaining_phones, 'Sem novos telefones para esta campanha.')
 
     driver = open_browser('geckodriver.exe')
@@ -70,12 +78,12 @@ def main():
 
 
 if __name__ == "__main__":
+    expiration_date = '2020-09-30'
     expiration_msg = 'Verifique a sua conexão à internet.\nSe estiver OK, contacte o desenvolvedor.'
     close_msg = 'Pressione ENTER e feche o navegador para encerrar.'
     try:
         date_str = urlopen('https://just-the-time.appspot.com/').read().strip().decode('utf-8')
         date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
-        expiration_date = '2020-09-30'
         if date <= datetime.strptime(expiration_date, '%Y-%m-%d'):
             main()
         else:
@@ -86,6 +94,4 @@ if __name__ == "__main__":
         input('\n'+close_msg)
     except WebDriverException:
         print('Ocorreu algum erro com o navegador ou com a conexão do computador.')
-        input('\n'+close_msg)
-    except:
         input('\n'+close_msg)
