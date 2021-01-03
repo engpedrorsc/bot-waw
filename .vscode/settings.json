@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\pedro\\anaconda3\\envs\\BotWAW\\python.exe",
+    "python.pythonPath": "bot_waw_env\\Scripts\\python.exe",
     "cSpell.ignoreWords": [
         "gdrive"
     ]

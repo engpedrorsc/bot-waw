@@ -30,17 +30,14 @@ def main():
     log_sent_file = f'{campaign}_sent.txt'
     log_invalid_file = f'{campaign}_invalid.txt'
     
-    phones = read_input(input_folder, 'Telefones.txt', 'Lista telefônica carregada.') # Phones list.
-    check_input(phones, 'Lista de telefones vazia.')
+    phones = read_input(input_folder, 'Telefones.txt', 'Lista telefônica carregada.', 'Lista de telefones vazia.') # Phones list.
     black_list = read_input(input_folder, 'bloqueados.txt', 'Lista telefônica carregada.') # Blacklisted phones
-    message = read_input(input_folder, 'Mensagem.txt', 'Mensagem carregada.') # Message to be sent.
-    check_input(message, 'Mensagem vazia.')
+    message = read_input(input_folder, 'Mensagem.txt', 'Mensagem carregada.', 'Mensagem vazia.') # Message to be sent.
     sent_log = read_input(log_folder, log_sent_file,'Telefones já contactados carregados.')
-    sent_log_counter = len(sent_log) # Counts previous delivered messages in the current campaign.
     invalid_log = read_input(log_folder, log_invalid_file, 'Telefones inválidos carregados.')
 
-    remaining_phones = difference(phones, black_list, sent_log, invalid_log, 'Telefones da campanha identificados.')
-    check_input(remaining_phones, 'Sem novos telefones para esta campanha.')
+    sent_log_counter = len(sent_log) # Counts previous delivered messages in the current campaign.
+    remaining_phones = difference(phones, black_list, sent_log, invalid_log, 'Telefones da campanha identificados.', 'Sem novos telefones para esta campanha.')
 
     driver = open_browser('geckodriver.exe')
     wdwA = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
