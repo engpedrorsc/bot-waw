@@ -6,15 +6,6 @@
 
 '''
 
-
-# from pathlib import Path
-# from selenium.webdriver.support.ui import WebDriverWait
-# from time import time
-# from functions import *
-# from datetime import datetime
-# from urllib.request import urlopen
-# from urllib.error import *
-
 from functions import *
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -92,47 +83,51 @@ def main():
 
     show_statistics()
 
-    # log_sent_file = f'{campaign}_sent.txt'
-    # log_invalid_file = f'{campaign}_invalid.txt'
+    ''' OLD CODE. WILL BE DELETED AFTER TESTS.
+    log_sent_file = f'{campaign}_sent.txt'
+    log_invalid_file = f'{campaign}_invalid.txt'
 
-    # phones = read_input(input_folder, 'Telefones.txt', 'Lista telefônica carregada.', 'Lista de telefones vazia.') # Phones list.
-    # black_list = read_input(input_folder, 'bloqueados.txt', 'Lista telefônica carregada.') # Blacklisted phones
-    # message = read_input(input_folder, 'Mensagem.txt', 'Mensagem carregada.', 'Mensagem vazia.') # Message to be sent.
-    # sent_log = read_input(log_folder, log_sent_file,'Telefones já contactados carregados.')
-    # invalid_log = read_input(log_folder, log_invalid_file, 'Telefones inválidos carregados.')
+    phones = read_input(input_folder, 'Telefones.txt', 'Lista telefônica carregada.', 'Lista de telefones vazia.') # Phones list.
+    black_list = read_input(input_folder, 'bloqueados.txt', 'Lista telefônica carregada.') # Blacklisted phones
+    message = read_input(input_folder, 'Mensagem.txt', 'Mensagem carregada.', 'Mensagem vazia.') # Message to be sent.
+    sent_log = read_input(log_folder, log_sent_file,'Telefones já contactados carregados.')
+    invalid_log = read_input(log_folder, log_invalid_file, 'Telefones inválidos carregados.')
 
-    # sent_log_counter = len(sent_log) # Counts previous delivered messages in the current campaign.
-    # remaining_phones = difference(phones, black_list, sent_log, invalid_log, 'Telefones da campanha identificados.', 'Sem novos telefones para esta campanha.')
+    sent_log_counter = len(sent_log) # Counts previous delivered messages in the current campaign.
+    remaining_phones = difference(phones, black_list, sent_log, invalid_log, 'Telefones da campanha identificados.', 'Sem novos telefones para esta campanha.')
 
 
-    # driver = open_browser('geckodriver.exe')
-    # wdw_short = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
-    # wdw_long = WebDriverWait(driver, 30, poll_frequency=0.5, ignored_exceptions=None) # Long wait.
-    # max_pace = 90 # Maximum sent messages per hour
-    # login(driver, 'http://web.whatsapp.com', wdw_short)
-    # sent_counter = 0 # Counts current delivered messages in the current campaign.
-    # start_time = time() # Set start running time to calculate the pace.
-    # for phone in remaining_phones:
-    #     print(f'Enviando mensagem para {phone}')
-    #     url = f'https://web.whatsapp.com/send?phone={phone}&source=&data=#.'
-    #     try:
-    #         send_message(start_time, driver, url, message, sent_counter, max_pace, wdw_short, wdw_long)
-    #     except InvalidUrl:
-    #         write_log(log_folder, log_invalid_file, phone)
-    #         continue
-    #     except WebDriverException:
-    #         raise WebDriverException('Computador desconectado. Verifique a conexão do computador. (main loop)')
-    #         input()
-    #     else:
-    #         write_log(log_folder, log_sent_file, phone)
-    #         sent_counter += 1
-    #         global_sent_counter = sent_counter + sent_log_counter
-    #         if global_sent_counter == 1:
-    #             print(f'{global_sent_counter} mensagem enviada nesta campanha.')
-    #         else:
-    #             print(f'{global_sent_counter} mensagens enviadas nesta campanha.')
-    # show_statistics() # To be written
-    # return
+    driver = open_browser('geckodriver.exe')
+    wdw_short = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
+    wdw_long = WebDriverWait(driver, 30, poll_frequency=0.5, ignored_exceptions=None) # Long wait.
+    max_pace = 90 # Maximum sent messages per hour
+    login(driver, 'http://web.whatsapp.com', wdw_short)
+    sent_counter = 0 # Counts current delivered messages in the current campaign.
+    start_time = time() # Set start running time to calculate the pace.
+    for phone in remaining_phones:
+        print(f'Enviando mensagem para {phone}')
+        url = f'https://web.whatsapp.com/send?phone={phone}&source=&data=#.'
+        try:
+            send_message(start_time, driver, url, message, sent_counter, max_pace, wdw_short, wdw_long)
+        except InvalidUrl:
+            write_log(log_folder, log_invalid_file, phone)
+            continue
+        except WebDriverException:
+            raise WebDriverException('Computador desconectado. Verifique a conexão do computador. (main loop)')
+            input()
+        else:
+            write_log(log_folder, log_sent_file, phone)
+            sent_counter += 1
+            global_sent_counter = sent_counter + sent_log_counter
+            if global_sent_counter == 1:
+                print(f'{global_sent_counter} mensagem enviada nesta campanha.')
+            else:
+                print(f'{global_sent_counter} mensagens enviadas nesta campanha.')
+    show_statistics() # To be written
+    return
+    '''
+
+
 if __name__ == "__main__":
     main()
 
