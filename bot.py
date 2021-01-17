@@ -16,10 +16,11 @@
 # from urllib.error import *
 
 from functions import *
-import shutil
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 def main():
+    # Files list
     files = ['mensagem.txt',
              'telefones_bloqueados.txt',
              'telefones_para_envio.txt']
@@ -37,6 +38,60 @@ def main():
     campaign_folder = open_campaign(files, campaign_folder_root)
     os.chdir(campaign_folder)
 
+    # File load and creation
+    message = read_input('mensagem.txt',
+                         'Mensagem carregada com sucesso.',
+                         'Mensagem vazia.')
+    full_phone_list = list(dict.fromkeys(read_input('telefones_para_envio.txt',
+                                                    'Lista de telefones carregada com sucesso.',
+                                                    'Lista de telefones vazia.')))
+    phone_black_list = list(dict.fromkeys(read_input('telefones_bloqueados.txt',
+                                                     'Lista de telefones bloqueados carregada com sucesso.')))
+    contacted_phones = list(dict.fromkeys(read_input('telefones_contactados.txt',
+                                                     'Lista de telefones contactados carregada com sucesso.')))
+    invalid_phones = list(dict.fromkeys(read_input('telefones_invalidos.txt',
+                                                   'Lista de telefones inválidos carregada com sucesso.')))
+
+    excluded_phones = phone_black_list + contacted_phones + invalid_phones
+    if len(excluded_phones) > 0:
+        phones_list = [
+            phone_number for phone_number in full_phone_list if phone_number not in excluded_phones]
+    else:
+        phones_list = full_phone_list
+
+    driver = open_browser('..' + os.sep + 'geckodriver.exe')
+    wdw_short = WebDriverWait(
+        driver, 15, poll_frequency=0.5, ignored_exceptions=None)  # Short wait.
+    wdw_long = WebDriverWait(
+        driver, 30, poll_frequency=0.5, ignored_exceptions=None)  # Long wait.
+    max_pace = 90  # Maximum sent messages per hour
+
+    login(driver, 'http://web.whatsapp.com', wdw_short)
+    # Counts current delivered messages in the current campaign.
+    current_sent_counter = 0
+    start_time = time()  # Set start running time to calculate the pace.
+
+    for phone in phones_list:
+        print(f'Enviando mensagem para {phone}.')
+        url = f'https://web.whatsapp.com/send?phone={phone}&source=&data=#.'
+        try:
+            send_message(start_time, driver, url, message,
+                         current_sent_counter, max_pace, wdw_short, wdw_long)
+        except InvalidUrl:
+            print('URL inválida.')
+            write_file('telefones_invalidos.txt', phone)
+            continue
+        else:
+            write_file(contacted_phones, phone)
+            current_sent_counter += 1
+            global_sent_counter = len(contacted_phones)
+            if global_sent_counter == 1:
+                print(f'{global_sent_counter} mensagem enviada nesta campanha.')
+            else:
+                print(f'{global_sent_counter} mensagens enviadas nesta campanha.')
+
+    show_statistics()
+
     # log_sent_file = f'{campaign}_sent.txt'
     # log_invalid_file = f'{campaign}_invalid.txt'
 
@@ -51,17 +106,17 @@ def main():
 
 
     # driver = open_browser('geckodriver.exe')
-    # wdwA = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
-    # wdwB = WebDriverWait(driver, 30, poll_frequency=0.5, ignored_exceptions=None) # Long wait.
+    # wdw_short = WebDriverWait(driver, 15, poll_frequency=0.5, ignored_exceptions=None) # Short wait.
+    # wdw_long = WebDriverWait(driver, 30, poll_frequency=0.5, ignored_exceptions=None) # Long wait.
     # max_pace = 90 # Maximum sent messages per hour
-    # login(driver, 'http://web.whatsapp.com', wdwA)
+    # login(driver, 'http://web.whatsapp.com', wdw_short)
     # sent_counter = 0 # Counts current delivered messages in the current campaign.
     # start_time = time() # Set start running time to calculate the pace.
     # for phone in remaining_phones:
     #     print(f'Enviando mensagem para {phone}')
     #     url = f'https://web.whatsapp.com/send?phone={phone}&source=&data=#.'
     #     try:
-    #         send_message(start_time, driver, url, message, sent_counter, max_pace, wdwA, wdwB)
+    #         send_message(start_time, driver, url, message, sent_counter, max_pace, wdw_short, wdw_long)
     #     except InvalidUrl:
     #         write_log(log_folder, log_invalid_file, phone)
     #         continue
@@ -71,11 +126,11 @@ def main():
     #     else:
     #         write_log(log_folder, log_sent_file, phone)
     #         sent_counter += 1
-    #         sent_total = sent_counter + sent_log_counter
-    #         if sent_total == 1:
-    #             print(f'{sent_total} mensagem enviada nesta campanha.')
+    #         global_sent_counter = sent_counter + sent_log_counter
+    #         if global_sent_counter == 1:
+    #             print(f'{global_sent_counter} mensagem enviada nesta campanha.')
     #         else:
-    #             print(f'{sent_total} mensagens enviadas nesta campanha.')
+    #             print(f'{global_sent_counter} mensagens enviadas nesta campanha.')
     # show_statistics() # To be written
     # return
 if __name__ == "__main__":

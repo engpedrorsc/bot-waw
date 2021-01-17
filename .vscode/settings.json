@@ -1,6 +1,7 @@
 {
     "python.pythonPath": "bot_waw_env\\Scripts\\python.exe",
     "cSpell.ignoreWords": [
-        "gdrive"
+        "gdrive",
+        "pyfiglet"
     ]
 }
