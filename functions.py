@@ -66,7 +66,7 @@ def open_mode():
     choice = int(input('Digite a opção escolhida e pressione ENTER: '))
     if choice not in [1, 2, 3]:
         print('\n---> Opção inválida.')
-        open_mode()
+        return open_mode()
     return choice
 
 
